@@ -1,0 +1,11 @@
+{
+
+  "host": "localhost",
+
+  "dbName":"parser",
+
+  "user": "root",
+
+  "password": ""
+
+}

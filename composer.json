@@ -1,0 +1,12 @@
+{
+    "name": "silivanov_aa/src",
+    "authors": [
+        {
+            "name": "Silivanov Andrey",
+            "email": "silivanov_aa@groupbwt.com"
+        }
+    ],
+    "require": {
+        "react/react": "^0.4.2"
+    }
+}
