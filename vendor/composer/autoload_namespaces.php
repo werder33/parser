@@ -6,5 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'NS\\' => array($baseDir . '/src'),
+    'Filter_' => array($baseDir . '/src/PEAR'),
     'Evenement' => array($vendorDir . '/evenement/evenement/src'),
 );

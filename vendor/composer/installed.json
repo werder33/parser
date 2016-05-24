@@ -144,27 +144,27 @@
         ]
     },
     {
-        "name": "react/socket",
-        "version": "v0.4.3",
-        "version_normalized": "0.4.3.0",
+        "name": "react/child-process",
+        "version": "v0.4.0",
+        "version_normalized": "0.4.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/reactphp/socket.git",
-            "reference": "ce015ec5879b96f5d30905f035f223aa85013fcc"
+            "url": "https://github.com/reactphp/child-process.git",
+            "reference": "8bf211533bcbb2034e00528a47400367570dc3d7"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/reactphp/socket/zipball/ce015ec5879b96f5d30905f035f223aa85013fcc",
-            "reference": "ce015ec5879b96f5d30905f035f223aa85013fcc",
+            "url": "https://api.github.com/repos/reactphp/child-process/zipball/8bf211533bcbb2034e00528a47400367570dc3d7",
+            "reference": "8bf211533bcbb2034e00528a47400367570dc3d7",
             "shasum": ""
         },
         "require": {
-            "evenement/evenement": "~2.0|~1.0",
-            "php": ">=5.3.0",
-            "react/event-loop": "0.4.*|0.3.*",
-            "react/stream": "0.4.*|0.3.*"
+            "evenement/evenement": "~2.0",
+            "php": ">=5.4.0",
+            "react/event-loop": "0.4.*",
+            "react/stream": "0.4.*"
         },
-        "time": "2016-03-01 20:10:35",
+        "time": "2014-02-02 01:11:26",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -174,16 +174,16 @@
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "React\\Socket\\": "src"
+                "React\\ChildProcess\\": ""
             }
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
             "MIT"
         ],
-        "description": "Library for building an evented socket server.",
+        "description": "Library for executing child processes.",
         "keywords": [
-            "Socket"
+            "process"
         ]
     },
     {
@@ -266,6 +266,49 @@
         "description": "Async caching.",
         "keywords": [
             "cache"
+        ]
+    },
+    {
+        "name": "react/socket",
+        "version": "v0.4.3",
+        "version_normalized": "0.4.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/reactphp/socket.git",
+            "reference": "ce015ec5879b96f5d30905f035f223aa85013fcc"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/reactphp/socket/zipball/ce015ec5879b96f5d30905f035f223aa85013fcc",
+            "reference": "ce015ec5879b96f5d30905f035f223aa85013fcc",
+            "shasum": ""
+        },
+        "require": {
+            "evenement/evenement": "~2.0|~1.0",
+            "php": ">=5.3.0",
+            "react/event-loop": "0.4.*|0.3.*",
+            "react/stream": "0.4.*|0.3.*"
+        },
+        "time": "2016-03-01 20:10:35",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "0.4-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "React\\Socket\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "Library for building an evented socket server.",
+        "keywords": [
+            "Socket"
         ]
     },
     {
@@ -468,50 +511,6 @@
         ]
     },
     {
-        "name": "react/http",
-        "version": "v0.4.1",
-        "version_normalized": "0.4.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/reactphp/http.git",
-            "reference": "f575989d67b7db0a65f5dd7e431d8f47af6c2f7b"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/reactphp/http/zipball/f575989d67b7db0a65f5dd7e431d8f47af6c2f7b",
-            "reference": "f575989d67b7db0a65f5dd7e431d8f47af6c2f7b",
-            "shasum": ""
-        },
-        "require": {
-            "evenement/evenement": "^2.0",
-            "guzzlehttp/psr7": "^1.0",
-            "php": ">=5.4.0",
-            "react/socket": "^0.4",
-            "react/stream": "^0.4"
-        },
-        "time": "2015-05-21 20:12:09",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "0.5-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "React\\Http\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "Library for building an evented http server.",
-        "keywords": [
-            "http"
-        ]
-    },
-    {
         "name": "react/http-client",
         "version": "v0.4.10",
         "version_normalized": "0.4.10.0",
@@ -559,85 +558,28 @@
         ]
     },
     {
-        "name": "react/child-process",
-        "version": "v0.4.0",
-        "version_normalized": "0.4.0.0",
+        "name": "react/http",
+        "version": "v0.4.1",
+        "version_normalized": "0.4.1.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/reactphp/child-process.git",
-            "reference": "8bf211533bcbb2034e00528a47400367570dc3d7"
+            "url": "https://github.com/reactphp/http.git",
+            "reference": "f575989d67b7db0a65f5dd7e431d8f47af6c2f7b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/reactphp/child-process/zipball/8bf211533bcbb2034e00528a47400367570dc3d7",
-            "reference": "8bf211533bcbb2034e00528a47400367570dc3d7",
+            "url": "https://api.github.com/repos/reactphp/http/zipball/f575989d67b7db0a65f5dd7e431d8f47af6c2f7b",
+            "reference": "f575989d67b7db0a65f5dd7e431d8f47af6c2f7b",
             "shasum": ""
         },
         "require": {
-            "evenement/evenement": "~2.0",
+            "evenement/evenement": "^2.0",
+            "guzzlehttp/psr7": "^1.0",
             "php": ">=5.4.0",
-            "react/event-loop": "0.4.*",
-            "react/stream": "0.4.*"
+            "react/socket": "^0.4",
+            "react/stream": "^0.4"
         },
-        "time": "2014-02-02 01:11:26",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "0.4-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "React\\ChildProcess\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "Library for executing child processes.",
-        "keywords": [
-            "process"
-        ]
-    },
-    {
-        "name": "react/react",
-        "version": "v0.4.2",
-        "version_normalized": "0.4.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/reactphp/react.git",
-            "reference": "457b6b8a16a37c11278cac0870d6d2ff911c5765"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/reactphp/react/zipball/457b6b8a16a37c11278cac0870d6d2ff911c5765",
-            "reference": "457b6b8a16a37c11278cac0870d6d2ff911c5765",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.4.0",
-            "react/cache": "0.4.*",
-            "react/child-process": "0.4.*",
-            "react/dns": "0.4.*",
-            "react/event-loop": "0.4.*",
-            "react/http": "0.4.*",
-            "react/http-client": "0.4.*",
-            "react/promise": "~2.1",
-            "react/socket": "0.4.*",
-            "react/socket-client": "0.4.*",
-            "react/stream": "0.4.*"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.0"
-        },
-        "suggest": {
-            "ext-event": "Allows for use of a more performant event-loop implementation.",
-            "ext-libev": "Allows for use of a more performant event-loop implementation.",
-            "ext-libevent": "Allows for use of a more performant event-loop implementation."
-        },
-        "time": "2014-12-11 02:06:55",
+        "time": "2015-05-21 20:12:09",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -645,15 +587,18 @@
             }
         },
         "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "React\\Http\\": "src"
+            }
+        },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
             "MIT"
         ],
-        "description": "Nuclear Reactor written in PHP.",
+        "description": "Library for building an evented http server.",
         "keywords": [
-            "asynchronous",
-            "event-loop",
-            "reactor"
+            "http"
         ]
     }
 ]

@@ -1,12 +1,23 @@
 {
-    "name": "silivanov_aa/src",
-    "authors": [
-        {
-            "name": "Silivanov Andrey",
-            "email": "silivanov_aa@groupbwt.com"
-        }
-    ],
     "require": {
-        "react/react": "^0.4.2"
+        "react/cache": "0.4.*",
+        "react/child-process": "0.4.*",
+        "react/dns": "0.4.*",
+        "react/event-loop": "0.4.*",
+        "react/http-client": "0.4.*",
+        "react/http": "0.4.*",
+        "react/promise": "~2.1",
+        "react/socket-client": "0.4.*",
+        "react/socket": "0.4.*",
+        "react/stream": "0.4.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "NS\\": "src/",
+            "Filter_": "src/PEAR"
+        },
+        "classmap": ["app/Controller", "app/Models", "core"]
     }
 }
+
+

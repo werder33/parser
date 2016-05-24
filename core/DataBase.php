@@ -33,19 +33,17 @@ class DataBase
         $user = $settings->user;
         $pass = $settings->password;
 
-        if (is_null(self::$instance)) {
             try {
-                self::$instance = new PDO('mysql:host=' . $host . ';dbname=' . $db_name, $user, $pass);
+                $db = new PDO('mysql:host=' . $host . ';dbname=' . $db_name, $user, $pass);
             } catch (PDOException $e) {
                 print "Error DataBase!: " . $e->getMessage() . "<br/>";
                 die();
             }
+            return $db;
 
-        }
-        return self::$instance;
     }
 
-    private static function settings()
+    public static function settings()
     {
         $f = file_get_contents('config/settings.json');
         $settings = json_decode($f);
