@@ -15,23 +15,23 @@ use app\Models\Proxy;
 
 class ProxyController extends Controller
 {
-    protected $proxy_model;
+    protected $proxyModel;
 
     public function __construct()
     {
-        $this->proxy_model = new Proxy();
+        $this->proxyModel = new Proxy();
     }
 
     public function searchProxy()
     {
-        $this->proxy_model->clearProxy();  // Удаляем все записи
+        $this->proxyModel->clearProxy();  // Удаляем все записи
 
         $path = "http://webanetlabs.net/publ/9-1-0-15";
         $page = file_get_contents($path);
         $pattern = '|\n[\d.:]+|';
         preg_match_all($pattern, $page, $out);
 
-        $this->proxy_model->saveProxy($out[0]);
+        $this->proxyModel->saveProxy($out[0]);
 
     }
 
@@ -45,7 +45,7 @@ class ProxyController extends Controller
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; ru; rv:1.9.0.1) Gecko/2008070208');
         $out = curl_exec($ch);
 
-        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $error = curl_error($ch);
         curl_close($ch);
         $i = 0;
@@ -59,7 +59,7 @@ class ProxyController extends Controller
             }
         }
         unset($arr1[0]);
-        $this->proxy_model->saveProxy($arr1);
+        $this->proxyModel->saveProxy($arr1);
 
     }
 
@@ -70,7 +70,7 @@ class ProxyController extends Controller
         $page = file_get_contents($url);
         $arr = preg_split('/\n/', $page);
 
-        $this->proxy_model->saveProxy($arr);
+        $this->proxyModel->saveProxy($arr);
     }
 
     public function searchProxy4()
@@ -105,7 +105,7 @@ class ProxyController extends Controller
             }
         }
 
-        $this->proxy_model->saveProxy($arr1);
+        $this->proxyModel->saveProxy($arr1);
     }
 
     public function searchProxy5()
@@ -134,7 +134,7 @@ class ProxyController extends Controller
         unset($arr1[count($arr1) - 1]);
         unset($arr1[0]);
 
-        $this->proxy_model->saveProxy($arr1);
+        $this->proxyModel->saveProxy($arr1);
     }
 
 
@@ -148,8 +148,7 @@ class ProxyController extends Controller
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; ru; rv:1.9.0.1) Gecko/2008070208');
         $out = curl_exec($ch);
 
-
-        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $error = curl_error($ch);
         curl_close($ch);
         $i = 0;
@@ -163,10 +162,8 @@ class ProxyController extends Controller
             }
         }
         $arr = explode(' ', $arr1[11]);
-
         unset($arr[count($arr) - 1]);
-
-        $this->proxy_model->saveProxy($arr);
+        $this->proxyModel->saveProxy($arr);
     }
 
     public function searchProxy7()
@@ -179,71 +176,106 @@ class ProxyController extends Controller
             $arr1[$i] = strip_tags($out[2][$i] . ":" . $out[1][$i]);
         }
         // print_r($arr1);
-        $this->proxy_model->saveProxy($arr1);
+        $this->proxyModel->saveProxy($arr1);
     }
 
+    public function searchProxy8()
+    {
+        $url = "http://free-pass.ru/forum/79-7962-1";
+        $page = file_get_contents($url);
+        $pattern = '/\d*\.\d*.\d*.\d*:\d*/';
+        preg_match_all($pattern, $page, $out);
+        $this->proxyModel->saveProxy($out[0]);
+    }
 
     public function getProxy()
     {
+        $path = "file/proxy.txt";
+
+        $fProxy = fopen($path, 'r');
+        $proxy = fread($fProxy, 65000);
+        $proxyServer = explode("\n", $proxy);
+
         echo "CHECK PROXY \n";
-        $proxy_server = $this->proxy_model->getProxy();
+        // $proxy_server = $this->proxy_model->getProxy();
         $url = 'https://www.google.com.ua/';
-        $user_agent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:33.0) Gecko/20100101 Firefox/33.0";
+        $userAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:33.0) Gecko/20100101 Firefox/33.0";
         $timeout = 3;
         $arr = [];
         $error_arr = [];
         $j = 0;
         // print_r($proxy_server);
-        for ($i = 0; $i < count($proxy_server); $i++) {
+        for ($i = 0; $i < count($proxyServer); $i++) {
 
             $ch = curl_init();
 
             curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
+            curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-            curl_setopt($ch, CURLOPT_PROXY, $proxy_server[$i]['ip']);
+            curl_setopt($ch, CURLOPT_PROXY, trim($proxyServer[$i]));
 
             $data = curl_exec($ch);
 
-            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            echo $proxy_server[$i]['ip'] . " - " . $http_code . "\n";
-            if ($http_code == 200) {
-                $this->proxy_model->updateProxy($proxy_server[$i]['id']);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            echo $proxyServer[$i] . " - " . $httpCode . "\n";
+            if ($httpCode == 200) {
+                $this->proxyModel->updateProxy($proxyServer[$i]['id']);
             }
             curl_close($ch);
         }
     }
 
-    public function getMultiProxy($proxy_server = [])
+    public function getMultiProxy($proxyServer = [], $stream)
     {
         echo "CHECK PROXY \n";
 
         $url = 'https://www.google.com.ua/';
-        $user_agent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:33.0) Gecko/20100101 Firefox/33.0";
+        $userAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:33.0) Gecko/20100101 Firefox/33.0";
         $timeout = 3;
 
-        for ($i = 0; $i < count($proxy_server); $i++) {
+        for ($i = 0; $i < count($proxyServer); $i++) {
 
             $ch = curl_init();
 
             curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
+            curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-            curl_setopt($ch, CURLOPT_PROXY, $proxy_server[$i]['ip']);
+            curl_setopt($ch, CURLOPT_PROXY, $proxyServer[$i]['ip']);
 
             $data = curl_exec($ch);
 
-            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            echo $proxy_server[$i]['ip'] . " - " . $http_code . "\n";
-            if ($http_code == 200) {
-                $this->proxy_model->updateProxy($proxy_server[$i]['id']);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            echo "Stream " . $stream . " - " . $proxyServer[$i]['ip'] . " - " . $httpCode . "\n";
+            if ($httpCode == 200) {
+                $this->proxyModel->updateProxy($proxyServer[$i]['id']);
             }
             curl_close($ch);
         }
     }
+
+    public function proxyAPI($count)
+    {
+        // $this->proxy_model->clearProxy();
+
+        for ($i = 0; $i < $count; $i++) {
+            $url = "http://gimmeproxy.com/api/getProxy?supportsHttps=false";
+            $page = file_get_contents($url);
+            //  echo $page;
+            //  exit();
+            if (isset($page)) {
+                $page = json_decode($page);
+                $proxy = $page->ipPort;
+                echo $proxy . "\n";
+                $this->proxyModel->saveOneProxy($proxy);
+            }
+            sleep(20);
+        }
+    }
+
+
 }
 

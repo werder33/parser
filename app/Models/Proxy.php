@@ -32,6 +32,18 @@ class Proxy
         }
     }
 
+    public function saveOneProxy($ip)
+    {
+        $db = DataBase::getInstance();
+
+
+        $sql = "INSERT INTO proxy (ip) VALUES (:ip)";
+        $stmt = $db->prepare($sql);
+        $stmt->execute(array(':ip' => $ip
+        ));
+        echo "SAVE \n";
+    }
+
 
     public function getProxy()
     {

@@ -20,23 +20,23 @@ class ParserController extends Controller
 
     }
 
-    public function google($name, $surname, $user_id = null)
+    public function google($name, $surname, $userId = null, $stream = null)
     {
 
         $url = 'http://www.google.com/search?num=20&q=' . $name . '+' . $surname;
-        $content = $this->getContent($url);
+        $content = $this->getContent($url, $stream);
         if (empty($content)) {
             echo "<<<<====== END PROXY ======>>>>";
         } else {
-            $pars_array = [];
-            $pars_array['title'] = $this->getTitle($content);
-            $pars_array['url'] = $this->getUrl($content);
-            $pars_array['snippet'] = $this->getSnippet($content);
+            $parsArray = [];
+            $parsArray['title'] = $this->getTitle($content);
+            $parsArray['url'] = $this->getUrl($content);
+            $parsArray['snippet'] = $this->getSnippet($content);
 
-            $pars_array = $this->checkParsing($pars_array, $name);
-            for ($i = 0; $i < count($pars_array); $i++) {
+            $parsArray = $this->checkParsing($parsArray, $name);
+            for ($i = 0; $i < count($parsArray); $i++) {
                 $m = new People();
-                $m->saveResult($pars_array[$i], $user_id);
+                $m->saveResult($parsArray[$i], $userId);
             }
         }
     }
@@ -87,21 +87,26 @@ class ParserController extends Controller
     }
 
 
-    public function getContent($url)
+    public function getContent($url, $stream = null)
     {
-        $proxy_model = new Proxy();
-        $proxies = $proxy_model->getGoodProxy();
+        /*$path = "file/proxy.txt";
+
+        $f_proxy = fopen($path, 'r');
+        $proxy = fread($f_proxy, 65000);
+        $proxies = explode("\n", $proxy);*/
+        $proxyModel = new Proxy();
+        $proxies = $proxyModel->getGoodProxy();
         if (empty($proxies)) {
             echo "<<<<======= PROXY NOT FOUND =======>>>>>>\n";
             exit();
         }
-
+        shuffle($proxies);
         $steps = count($proxies);
         $step = 0;
         $try = true;
 
         while ($try) {
-            $proxy = isset($proxies[$step]['ip']) ? $proxies[$step]['ip'] : null;
+            $proxy = isset($proxies[$step]) ? $proxies[$step] : null;
 
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -109,20 +114,20 @@ class ParserController extends Controller
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); // редирект
             curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; ru; rv:1.9.0.1) Gecko/2008070208');
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-            curl_setopt($ch, CURLOPT_PROXY, $proxy);
+            curl_setopt($ch, CURLOPT_PROXY, trim($proxy));
             //  @curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
             $out = curl_exec($ch);
-            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
 
-            echo $proxy . " - " . $http_code . "\n";
+            echo "Stream " . $stream . " - " . trim($proxy) . " - " . $httpCode . "\n";
             $step++;
-            if ($http_code == 404) {
+            if ($httpCode == 404) {
                 echo "<<<<<<<<<<<====== PAGE NOT FOUND =======>>>>>>>>>\n";
             }
-            $try = (($step < $steps) && $http_code != 200 && $http_code != 404);
+            $try = (($step < $steps) && $httpCode != 200 && $httpCode != 404);
+            sleep(3);
         }
-
         return $out;
     }
 
@@ -132,11 +137,13 @@ class ParserController extends Controller
         $checkArray = [];
         $j = 0;
         for ($i = 0; $i < count($arr['title']); $i++) {
-            if (strpos($arr['title'][$i], $name) !== false || strpos($arr['snippet'][$i], $name) !== false) {
-                $checkArray[$j]['title'] = $arr['title'][$i];
-                $checkArray[$j]['snippet'] = $arr['snippet'][$i];
-                $checkArray[$j]['url'] = $arr['url'][$i];
-                $j++;
+            if (isset($arr['title'][$i]) && isset($arr['snippet'][$i])) {
+                if (strpos($arr['title'][$i], $name) !== false || strpos($arr['snippet'][$i], $name) !== false) {
+                    $checkArray[$j]['title'] = $arr['title'][$i];
+                    $checkArray[$j]['snippet'] = $arr['snippet'][$i];
+                    $checkArray[$j]['url'] = $arr['url'][$i];
+                    $j++;
+                }
             }
         }
         print_r($checkArray);

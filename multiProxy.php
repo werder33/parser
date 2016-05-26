@@ -7,67 +7,36 @@ use app\Controller\ProxyController;
 
 
 $proxy_model = new \app\Models\Proxy();
-$proxy_model->clearProxy();
+/*$proxy_model->clearProxy();
 $proxy = new ProxyController();
 $proxy->searchProxy();
 $proxy->searchProxy2();
 $proxy->searchProxy5();    // парсинг списков прокси
 $proxy->searchProxy4();
 $proxy->searchProxy6();
-$proxy->searchProxy7();
+$proxy->searchProxy7();*/
 
-$stream = $argc[1];
+$stream = 1;
+if (isset($argv[1])) {
+    $stream = $argv[1];
+}
+
+
 $loop = React\EventLoop\Factory::create();
-echo $stream;
-// Stream 1
-/*
 
-$process = new React\ChildProcess\Process('php proxyStream1.php');
-$process->on('exit', function ($exitCode, $termSignal) {
-    echo "Child exit\n";
-});
-$loop->addTimer(0.001, function ($timer) use ($process) {
-    $process->start($timer->getLoop());
-    $process->stdout->on('data', function ($output) {
-        echo "Stream 1 says: {$output}";
+for($i=1; $i<=$stream; $i++){
+    $process = new React\ChildProcess\Process('php streamProxy.php '. $stream.' '.$i);
+    $process->on('exit', function ($exitCode, $termSignal) {
+        echo "Child exit\n";
     });
-});
-
-// Stream 2
-$process2 = new React\ChildProcess\Process('php proxyStream2.php');
-$process2->on('exit', function ($exitCode, $termSignal) {
-    echo "Child exit\n";
-});
-$loop->addTimer(0.001, function ($timer) use ($process2) {
-    $process2->start($timer->getLoop());
-    $process2->stdout->on('data', function ($output) {
-        echo "Stream 2 says: {$output}";
+    $loop->addTimer(0.501, function ($timer) use ($process) {
+        $process->start($timer->getLoop());
+        $process->stdout->on('data', function ($output) {
+            echo "{$output}";
+        });
     });
-});
-
-// Stream 3
-$process3 = new React\ChildProcess\Process('php proxyStream3.php');
-$process3->on('exit', function ($exitCode, $termSignal) {
-    echo "Child exit\n";
-});
-$loop->addTimer(0.001, function ($timer) use ($process3) {
-    $process3->start($timer->getLoop());
-    $process3->stdout->on('data', function ($output) {
-        echo "Stream 3 says: {$output}";
-    });
-});
-
-// Stream 4
-$process4 = new React\ChildProcess\Process('php proxyStream4.php');
-$process4->on('exit', function ($exitCode, $termSignal) {
-    echo "Child exit\n";
-});
-$loop->addTimer(0.001, function ($timer) use ($process4) {
-    $process4->start($timer->getLoop());
-    $process4->stdout->on('data', function ($output) {
-        echo "Stream 4 says: {$output}";
-    });
-});*/
+    sleep(1);
+}
 
 $loop->addPeriodicTimer(5, function ($timer) {
     echo "Parent cannot be blocked by child\n";
