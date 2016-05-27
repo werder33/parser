@@ -37,22 +37,20 @@ class People
         return $arr;
     }
 
-    public function saveResult($arr = [], $user_id)
+    public function saveResult($arr = [], $userId)
     {
         $db = DataBase::getInstance();
         $title = $arr['title'];
         $snippet = $arr['snippet'];
         $url = $arr['url'];
-
         $sql = "INSERT INTO result (user_id, title, url, snippet) VALUES (:user_id, :title, :url, :snippet)";
         $stmt = $db->prepare($sql);
-        $stmt->execute(array(':user_id' => $user_id,
+        $stmt->execute(array(':user_id' => $userId,
             ':title' => $title,
             ':url' => $url,
             ':snippet' => $snippet,
         ));
         echo "SAVE \n";
-
     }
 
     public function getResult()
@@ -68,24 +66,21 @@ class People
 
         }
         return $arr;
-
     }
 
-    public function getPeopleLimit($start, $end){
 
+    public function getPeopleLimit($start, $end)
+    {
         $db = DataBase::getInstance();
         $arr = [];
-        $sql = "SELECT * FROM names LIMIT $start,$end";
+        $sql = "SELECT * FROM names WHERE id NOT IN( SELECT user_id FROM result) LIMIT $start, $end";
         $stmt = $db->prepare($sql);
         $stmt->execute();
         $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($row as $key => $value) {
             $arr[$key] = $value;
-
         }
         return $arr;
-
-
     }
 
 }

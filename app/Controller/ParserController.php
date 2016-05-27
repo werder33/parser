@@ -25,9 +25,17 @@ class ParserController extends Controller
 
         $url = 'http://www.google.com/search?num=20&q=' . $name . '+' . $surname;
         $content = $this->getContent($url, $stream);
+        $m = new People();
         if (empty($content)) {
             echo "<<<<====== END PROXY ======>>>>";
-        } else {
+        }
+        elseif($content == 404){
+            $parsArray['title'] = " ";
+            $parsArray['url'] = " ";
+            $parsArray['snippet'] = " ";
+            $m->saveResult($parsArray, $userId);
+        }
+        else {
             $parsArray = [];
             $parsArray['title'] = $this->getTitle($content);
             $parsArray['url'] = $this->getUrl($content);
@@ -35,7 +43,7 @@ class ParserController extends Controller
 
             $parsArray = $this->checkParsing($parsArray, $name);
             for ($i = 0; $i < count($parsArray); $i++) {
-                $m = new People();
+
                 $m->saveResult($parsArray[$i], $userId);
             }
         }
@@ -114,16 +122,17 @@ class ParserController extends Controller
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); // редирект
             curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; ru; rv:1.9.0.1) Gecko/2008070208');
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-            curl_setopt($ch, CURLOPT_PROXY, trim($proxy));
+            curl_setopt($ch, CURLOPT_PROXY, trim($proxy['ip']));
             //  @curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
             $out = curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
 
-            echo "Stream " . $stream . " - " . trim($proxy) . " - " . $httpCode . "\n";
+            echo "Stream " . $stream . " - " . trim($proxy['ip']) . " - " . $httpCode . "\n";
             $step++;
             if ($httpCode == 404) {
                 echo "<<<<<<<<<<<====== PAGE NOT FOUND =======>>>>>>>>>\n";
+                return $out = 404;
             }
             $try = (($step < $steps) && $httpCode != 200 && $httpCode != 404);
             sleep(3);

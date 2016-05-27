@@ -83,7 +83,7 @@ class ProxyController extends Controller
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; ru; rv:1.9.0.1) Gecko/2008070208');
         $out = curl_exec($ch);
 
-        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $error = curl_error($ch);
         curl_close($ch);
         $i = 0;
@@ -190,36 +190,32 @@ class ProxyController extends Controller
 
     public function getProxy()
     {
-        $path = "file/proxy.txt";
+        /* $path = "file/proxy.txt";
 
-        $fProxy = fopen($path, 'r');
-        $proxy = fread($fProxy, 65000);
-        $proxyServer = explode("\n", $proxy);
+         $fProxy = fopen($path, 'r');
+         $proxy = fread($fProxy, 65000);
+         $proxyServer = explode("\n", $proxy);*/
 
         echo "CHECK PROXY \n";
-        // $proxy_server = $this->proxy_model->getProxy();
+        $proxyServer = $this->proxyModel->getProxy();
         $url = 'https://www.google.com.ua/';
         $userAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:33.0) Gecko/20100101 Firefox/33.0";
         $timeout = 3;
-        $arr = [];
-        $error_arr = [];
-        $j = 0;
-        // print_r($proxy_server);
+
+
         for ($i = 0; $i < count($proxyServer); $i++) {
 
             $ch = curl_init();
-
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-            curl_setopt($ch, CURLOPT_PROXY, trim($proxyServer[$i]));
-
+            curl_setopt($ch, CURLOPT_PROXY, trim($proxyServer[$i]['ip']));
             $data = curl_exec($ch);
 
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            echo $proxyServer[$i] . " - " . $httpCode . "\n";
+            echo $proxyServer[$i]['ip'] . " - " . $httpCode . "\n";
             if ($httpCode == 200) {
                 $this->proxyModel->updateProxy($proxyServer[$i]['id']);
             }
@@ -238,17 +234,15 @@ class ProxyController extends Controller
         for ($i = 0; $i < count($proxyServer); $i++) {
 
             $ch = curl_init();
-
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
             curl_setopt($ch, CURLOPT_PROXY, $proxyServer[$i]['ip']);
-
             $data = curl_exec($ch);
-
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
             echo "Stream " . $stream . " - " . $proxyServer[$i]['ip'] . " - " . $httpCode . "\n";
             if ($httpCode == 200) {
                 $this->proxyModel->updateProxy($proxyServer[$i]['id']);
@@ -272,7 +266,7 @@ class ProxyController extends Controller
                 echo $proxy . "\n";
                 $this->proxyModel->saveOneProxy($proxy);
             }
-            sleep(20);
+            sleep(40);
         }
     }
 

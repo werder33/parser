@@ -12,9 +12,9 @@ if (isset($argv[2])) {
 
 
 $proxy = new \app\Controller\ProxyController();
-$proxy_model = new \app\Models\Proxy();
+$proxyModel = new \app\Models\Proxy();
 
-$server = $proxy_model->getProxy();
+$server = $proxyModel->getProxy();
 // определяем сколько ip на один поток
 $count = round(count($server) / $stream);
 $end = $count;
@@ -27,6 +27,6 @@ if ($i <= 0) {
     $start = $count * ($i - 1);
 }
 
-$server = $proxy_model->getProxyLimit($start, $end);
+$server = $proxyModel->getProxyLimit($start, $end);
 
 $proxy->getMultiProxy($server, $i);

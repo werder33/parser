@@ -9,7 +9,6 @@ return array(
     'app\\Controller\\Controller' => $baseDir . '/app/Controller/Controller.php',
     'app\\Controller\\ParserController' => $baseDir . '/app/Controller/ParserController.php',
     'app\\Controller\\ProxyController' => $baseDir . '/app/Controller/ProxyController.php',
-    'app\\Models\\Model' => $baseDir . '/app/Models/Model.php',
     'app\\Models\\People' => $baseDir . '/app/Models/People.php',
     'app\\Models\\Proxy' => $baseDir . '/app/Models/Proxy.php',
     'core\\DataBase' => $baseDir . '/core/DataBase.php',

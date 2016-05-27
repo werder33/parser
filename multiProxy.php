@@ -6,26 +6,25 @@ require 'vendor/autoload.php';
 use app\Controller\ProxyController;
 
 
-$proxy_model = new \app\Models\Proxy();
-/*$proxy_model->clearProxy();
+$proxyModel = new \app\Models\Proxy();
+$proxyModel->clearProxy();
 $proxy = new ProxyController();
 $proxy->searchProxy();
 $proxy->searchProxy2();
 $proxy->searchProxy5();    // парсинг списков прокси
 $proxy->searchProxy4();
 $proxy->searchProxy6();
-$proxy->searchProxy7();*/
+$proxy->searchProxy7();
 
 $stream = 1;
 if (isset($argv[1])) {
     $stream = $argv[1];
 }
 
-
 $loop = React\EventLoop\Factory::create();
 
-for($i=1; $i<=$stream; $i++){
-    $process = new React\ChildProcess\Process('php streamProxy.php '. $stream.' '.$i);
+for ($i = 1; $i <= $stream; $i++) {
+    $process = new React\ChildProcess\Process('php streamProxy.php ' . $stream . ' ' . $i);
     $process->on('exit', function ($exitCode, $termSignal) {
         echo "Child exit\n";
     });

@@ -11,6 +11,7 @@ namespace app\Controller;
 use app\Controller\ProxyController;
 use app\Controller\ParserController;
 use app\Models\People;
+use app\Models\Proxy;
 
 
 include 'app/Libs/simple_html_dom.php';
@@ -24,9 +25,12 @@ class Controller
         $proxy = new ProxyController();
         echo "PROXY LOADING... \n";
         //$proxy->searchProxy8();
-        $proxy->proxyAPI(2);
-        exit();
-        // $proxy->getProxy();
+        $proxyM = new Proxy();
+       // $proxyM->clearProxy();
+       // $proxy->searchProxy();
+        //$proxy->getProxy();
+       // exit();
+        //
         //
         // $proxy->searchProxy();
         /*  $proxy->searchProxy2();
@@ -59,7 +63,7 @@ class Controller
                 $proxy->searchProxy4();
                 $proxy->getProxy();
             }
-            sleep(2);
+
         }
 
     }

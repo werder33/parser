@@ -35,8 +35,6 @@ class Proxy
     public function saveOneProxy($ip)
     {
         $db = DataBase::getInstance();
-
-
         $sql = "INSERT INTO proxy (ip) VALUES (:ip)";
         $stmt = $db->prepare($sql);
         $stmt->execute(array(':ip' => $ip
@@ -55,17 +53,14 @@ class Proxy
         $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($row as $key => $value) {
             $arr[$key] = $value;
-
         }
         return $arr;
-
     }
 
     public function updateProxy($id)
     {
         $db = DataBase::getInstance();
-        $sql = "UPDATE proxy SET status = 'good'
-                                       WHERE id = :id";
+        $sql = "UPDATE proxy SET status = '1' WHERE id = :id";
         $stmt = $db->prepare($sql);
         $stmt->execute(array(':id' => $id,));
         echo "UPDATE \n";
@@ -83,7 +78,7 @@ class Proxy
     public function getGoodProxy()
     {
         $db = DataBase::getInstance();
-        $sql = "SELECT * FROM proxy WHERE status = 'good'";
+        $sql = "SELECT * FROM proxy where status = 1";
         $stm = $db->query($sql);
         $arr = $stm->fetchAll(PDO::FETCH_ASSOC);
         return $arr;
@@ -99,7 +94,6 @@ class Proxy
         $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($row as $key => $value) {
             $arr[$key] = $value;
-
         }
         return $arr;
     }
